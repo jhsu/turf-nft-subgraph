@@ -1,6 +1,23 @@
-type ExampleEntity @entity {
+type Token @entity {
   id: ID!
-  count: BigInt!
-  owner: Bytes! # address
-  approved: Bytes! # address
+  tokenId: BigInt!
+  tokenURI: String!
+  image: String!
+  owner: Wallet!
+  transfers: [TokenTransfer!] @derivedFrom(field: "token")
+}
+
+type Wallet @entity {
+  id: ID!
+  tokens: [Token!] @derivedFrom(field: "owner")
+  transfersIn: [TokenTransfer!] @derivedFrom(field: "to")
+  transfersOut: [TokenTransfer!] @derivedFrom(field: "from")
+}
+
+type TokenTransfer @entity {
+  id: ID!
+  createdAt: BigInt!
+  token: Token!
+  from: Wallet!
+  to: Wallet!
 }

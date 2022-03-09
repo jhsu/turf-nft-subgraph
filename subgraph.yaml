@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.4
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,6 +8,7 @@ dataSources:
     source:
       address: "0x55d89273143DE3dE00822c9271DbCBD9B44B44C6"
       abi: Turf
+      startBlock: 14122767
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -17,16 +18,12 @@ dataSources:
         - ApprovalForAll
         - OwnershipTransferred
         - Transfer
+        - Wallet
+        - Token
       abis:
         - name: Turf
           file: ./abis/Turf.json
       eventHandlers:
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/mapping.ts
