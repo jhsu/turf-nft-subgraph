@@ -4,20 +4,10 @@ type Token @entity {
   tokenURI: String!
   image: String!
   owner: Wallet!
-  transfers: [TokenTransfer!] @derivedFrom(field: "token")
 }
 
 type Wallet @entity {
   id: ID!
+  ownedPlots: Int!
   tokens: [Token!] @derivedFrom(field: "owner")
-  transfersIn: [TokenTransfer!] @derivedFrom(field: "to")
-  transfersOut: [TokenTransfer!] @derivedFrom(field: "from")
-}
-
-type TokenTransfer @entity {
-  id: ID!
-  createdAt: BigInt!
-  token: Token!
-  from: Wallet!
-  to: Wallet!
 }

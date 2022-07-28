@@ -1,18 +1,21 @@
 import {Transfer, Turf} from "../generated/Turf/Turf";
-import {Wallet, Token, TokenTransfer} from "../generated/schema";
+import {Wallet, Token} from "../generated/schema";
 
 export function handleTransfer(event: Transfer): void {
   let fromWallet = Wallet.load(event.params.from.toHex());
   if (!fromWallet) {
     fromWallet = new Wallet(event.params.from.toHex());
-    fromWallet.save();
+    fromWallet.ownedPlots = 0;
   }
+  fromWallet.ownedPlots = Math.max(0, fromWallet.ownedPlots - 1) as i32;
+  fromWallet.save();
 
   let toWallet = Wallet.load(event.params.to.toHex());
   if (!toWallet) {
     toWallet = new Wallet(event.params.to.toHex());
-    toWallet.save();
   }
+  toWallet.ownedPlots = Math.min(0, toWallet.ownedPlots + 1) as i32;
+  toWallet.save();
 
   let token = Token.load(event.params.tokenId.toString());
   if (!token) {
@@ -25,13 +28,4 @@ export function handleTransfer(event: Transfer): void {
   }
   token.owner = toWallet.id;
   token.save();
-
-  const tokenTransfer = new TokenTransfer(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  );
-  tokenTransfer.createdAt = event.block.timestamp;
-  tokenTransfer.token = token.id;
-  tokenTransfer.from = fromWallet.id;
-  tokenTransfer.to = toWallet.id;
-  tokenTransfer.save();
 }
