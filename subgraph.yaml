@@ -1,4 +1,4 @@
-specVersion: 0.1.0
+specVersion: 0.0.6
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x55d89273143DE3dE00822c9271DbCBD9B44B44C6"
       abi: Turf
-      startBlock: 14122767
+      startBlock: 14122768
     mapping:
       kind: ethereum/events
       apiVersion: 0.1.0
